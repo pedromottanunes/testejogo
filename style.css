@@ -1,0 +1,99 @@
+/* Fonte Google opcional – remove se quiser off-line */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+:root {
+  --primary: #2563eb;
+  --bg: #f8fafc;
+  --dark: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", Arial, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 24px 16px 8px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+main {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 16px 32px;
+}
+
+/* Gráfico ocupa 100% da largura disponível */
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px #0002;
+  margin-bottom: 24px;
+}
+
+/* Área de controles */
+#controls label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button:hover { opacity: 0.9; }
+button:active { opacity: 0.8; }
+
+#message {
+  min-height: 1.4em;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+footer {
+  margin-top: auto;
+  padding: 12px;
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: center;
+}
