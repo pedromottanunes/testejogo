@@ -1,117 +1,113 @@
-/* ========= CONFIGURAÇÕES INICIAIS ========= */
-const slopeInput     = document.getElementById("slope");
-const interceptInput = document.getElementById("intercept");
-const slopeVal       = document.getElementById("slopeVal");
-const interceptVal   = document.getElementById("interceptVal");
-const messageEl      = document.getElementById("message");
-const scoreEl        = document.getElementById("scoreVal");
-const checkBtn       = document.getElementById("checkBtn");
-const newTargetBtn   = document.getElementById("newTargetBtn");
+/*  ========  utilidades  ========  */
 
-let chart, target, score = 0;
+// Arredondamento para duas casas decimais
+const round2 = n => Math.round(n * 100) / 100;
 
-/* ========= FUNÇÕES UTILITÁRIAS ========= */
-function randomInRange(min, max, step = 1) {
-  const nSteps = Math.floor((max - min) / step);
-  return (min + step * Math.floor(Math.random() * (nSteps + 1)));
+// Cria um input numérico com rótulo
+function makeNumberInput(id, label, placeholder = "") {
+  const wrapper = document.createElement("div");
+
+  const lbl = document.createElement("label");
+  lbl.htmlFor = id;
+  lbl.textContent = label;
+
+  const inp = document.createElement("input");
+  inp.type = "number";
+  inp.id = id;
+  inp.min = "0";
+  inp.step = "any";
+  inp.placeholder = placeholder;
+  inp.required = true;
+
+  wrapper.append(lbl, inp);
+  return wrapper;
 }
 
-function generateTarget() {
-  // x entre -5 e 5 | y entre -10 e 10
-  return { x: randomInRange(-5, 5, 1), y: randomInRange(-10, 10, 1) };
-}
+/*  ========  lógica principal  ========  */
 
-function lineData(m, b) {
-  // Dois pontos para traçar a reta
-  const xMin = -5, xMax = 5;
-  return [
-    { x: xMin, y: m * xMin + b },
-    { x: xMax, y: m * xMax + b }
-  ];
-}
+const shapeSelect = document.getElementById("shapeSelect");
+const inputsContainer = document.getElementById("inputsContainer");
+const calcBtn = document.getElementById("calcBtn");
+const resultDiv = document.getElementById("result");
 
-function updateChart(m, b) {
-  const line = lineData(m, b);
-  chart.data.datasets[0].data = line;
-  chart.data.datasets[1].data = [target];
-  chart.update();
-}
+// Mapeia cada forma aos campos necessários e à fórmula de área
+const shapes = {
+  square: {
+    fields: [
+      () => makeNumberInput("side", "Lado (cm)")
+    ],
+    area: data => data.side ** 2,
+    label: "cm²"
+  },
 
-/* ========= INICIALIZAÇÃO DO CHART ========= */
-function initChart() {
-  const ctx = document.getElementById("chart").getContext("2d");
+  rectangle: {
+    fields: [
+      () => makeNumberInput("base", "Base (cm)"),
+      () => makeNumberInput("height", "Altura (cm)")
+    ],
+    area: data => data.base * data.height,
+    label: "cm²"
+  },
 
-  chart = new Chart(ctx, {
-    type: "scatter",
-    data: {
-      datasets: [
-        {
-          label: "Sua reta",
-          data: lineData(1, 0),
-          showLine: true,
-          borderWidth: 2,
-          borderColor: "#2563eb",
-          pointRadius: 0
-        },
-        {
-          label: "Ponto-alvo",
-          data: [target],
-          backgroundColor: "#e11d48",
-          pointRadius: 6
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: { min: -6, max: 6, grid: { color: "#94a3b8" } },
-        y: { min: -12, max: 12, grid: { color: "#94a3b8" } }
-      },
-      plugins: { legend: { display: false } }
-    }
-  });
-}
+  triangle: {
+    fields: [
+      () => makeNumberInput("base", "Base (cm)"),
+      () => makeNumberInput("height", "Altura (cm)")
+    ],
+    area: data => (data.base * data.height) / 2,
+    label: "cm²"
+  },
 
-/* ========= LÓGICA DO JOGO ========= */
-function resetGame() {
-  target = generateTarget();
-  updateChart(Number(slopeInput.value), Number(interceptInput.value));
-  messageEl.textContent = `Ajuste m e b para que a reta passe por (${target.x}, ${target.y}).`;
-}
+  circle: {
+    fields: [
+      () => makeNumberInput("radius", "Raio (cm)")
+    ],
+    area: data => Math.PI * data.radius ** 2,
+    label: "cm²"
+  },
 
-function checkAnswer() {
-  const m = Number(slopeInput.value);
-  const b = Number(interceptInput.value);
-  const yLine = m * target.x + b;
-
-  // tolerância de ±0.5
-  if (Math.abs(yLine - target.y) <= 0.5) {
-    score++;
-    messageEl.textContent = "🎉 Parabéns! Acertou.";
-    resetGame();
-  } else {
-    messageEl.textContent = "❌ Ainda não. Tente ajustar melhor.";
+  trapezoid: {
+    fields: [
+      () => makeNumberInput("base1", "Base maior (cm)"),
+      () => makeNumberInput("base2", "Base menor (cm)"),
+      () => makeNumberInput("height", "Altura (cm)")
+    ],
+    area: data => ((data.base1 + data.base2) * data.height) / 2,
+    label: "cm²"
   }
-  scoreEl.textContent = score;
-}
+};
 
-/* ========= EVENTOS ========= */
-slopeInput.addEventListener("input", () => {
-  slopeVal.textContent = slopeInput.value;
-  updateChart(Number(slopeInput.value), Number(interceptInput.value));
-});
-interceptInput.addEventListener("input", () => {
-  interceptVal.textContent = interceptInput.value;
-  updateChart(Number(slopeInput.value), Number(interceptInput.value));
-});
-checkBtn.addEventListener("click", checkAnswer);
-newTargetBtn.addEventListener("click", resetGame);
+// Sempre que mudar a forma, recria o formulário correspondente
+shapeSelect.addEventListener("change", () => {
+  const key = shapeSelect.value;
+  inputsContainer.innerHTML = ""; // limpa
 
-/* ========= START ========= */
-window.addEventListener("DOMContentLoaded", () => {
-  target = generateTarget();
-  initChart();
-  updateChart(1, 0);
-  messageEl.textContent = `Ajuste m e b para que a reta passe por (${target.x}, ${target.y}).`;
+  if (!key) return;
+
+  shapes[key].fields.forEach(fn => inputsContainer.append(fn()));
+  calcBtn.disabled = false;
+  resultDiv.textContent = "";
+});
+
+// Executa o cálculo quando o usuário clicar
+calcBtn.addEventListener("click", () => {
+  const key = shapeSelect.value;
+  if (!key) return;
+
+  // Coleta valores numéricos
+  const data = {};
+  inputsContainer.querySelectorAll("input").forEach(inp => {
+    data[inp.id] = parseFloat(inp.value);
+  });
+
+  // Validação simples
+  const invalid = Object.values(data).some(v => isNaN(v) || v <= 0);
+  if (invalid) {
+    resultDiv.textContent = "Preencha todos os valores corretamente 😉";
+    return;
+  }
+
+  // Calcula e exibe
+  const area = shapes[key].area(data);
+  resultDiv.textContent = `Área: ${round2(area)} ${shapes[key].label}`;
 });
