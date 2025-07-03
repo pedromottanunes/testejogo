@@ -8,7 +8,7 @@
 </head>
 <body>
   <main class="card">
-    <h1>Calculadora de Áreas</h1>
+    <h1>Calculadora&nbsp;de&nbsp;Áreas</h1>
 
     <label for="shapeSelect">Escolha a forma:</label>
     <select id="shapeSelect">
@@ -20,7 +20,11 @@
       <option value="trapezoid">Trapézio</option>
     </select>
 
-    <form id="inputsContainer"></form>
+    <!-- Desenho da forma -->
+    <div id="shapeIllustration" class="shape-illustration"></div>
+
+    <!-- Campos dinâmicos -->
+    <div id="inputsContainer"></div>
 
     <button id="calcBtn" disabled>Calcular</button>
 
