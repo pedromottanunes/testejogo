@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Desafio da Função Linear</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js – via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Desafio da Função Linear</h1>
+    <p>Acerte a reta que passa pelo ponto-alvo!</p>
+  </header>
+
+  <main>
+    <!-- Gráfico -->
+    <canvas id="chart" width="400" height="400"></canvas>
+
+    <!-- Controles -->
+    <section id="controls">
+      <label>
+        Inclinação&nbsp;(m): <span id="slopeVal">1</span><br />
+        <input type="range" id="slope" min="-5" max="5" step="0.5" value="1" />
+      </label>
+
+      <label>
+        Intercepto&nbsp;(b): <span id="interceptVal">0</span><br />
+        <input type="range" id="intercept" min="-10" max="10" step="1" value="0" />
+      </label>
+
+      <div class="buttons">
+        <button id="checkBtn">Verificar</button>
+        <button id="newTargetBtn">Novo Desafio</button>
+      </div>
+
+      <p id="message"></p>
+      <p id="score">Pontuação: <span id="scoreVal">0</span></p>
+    </section>
+  </main>
+
+  <footer>© 2025 – Aprendizado Divertido</footer>
+
+  <!-- Lógica do jogo -->
+  <script src="script.js"></script>
+</body>
+</html>
