@@ -1,26 +1,27 @@
-/* Reset minúsculo */
+/* =====  Reset & layout  ===== */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: system-ui, sans-serif;
 }
 
 body {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: #f0f4ff;
+  background: #eef3ff;
 }
 
+/* =====  Cartão  ===== */
 .card {
   width: 100%;
-  max-width: 420px;
-  background: white;
+  max-width: 440px;
+  background: #fff;
   padding: 2rem 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 14px rgb(0 0 0 / 0.12);
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 12%);
 }
 
 h1 {
@@ -32,42 +33,53 @@ label,
 select,
 input {
   width: 100%;
-  margin-bottom: 0.75rem;
   font-size: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 input,
 select {
-  padding: 0.5rem;
+  padding: 0.55rem;
   border: 1px solid #ccd;
   border-radius: 6px;
 }
 
 button {
   width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
+  padding: 0.8rem;
   font-weight: 600;
   border: none;
   border-radius: 6px;
-  background: #4a6cf7;
-  color: white;
+  background: #4564f2;
+  color: #fff;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 button:disabled {
-  background: #9a9fae;
+  background: #a0a6b8;
   cursor: not-allowed;
 }
 
 button:not(:disabled):hover {
-  background: #3651d0;
+  background: #324cce;
 }
 
+/* =====  Resultado  ===== */
 #result {
   margin-top: 1rem;
   font-size: 1.25rem;
   font-weight: 600;
   text-align: center;
+}
+
+/* =====  Ilustração  ===== */
+.shape-illustration {
+  width: 160px;
+  height: 160px;
+  margin: 0.5rem auto 1rem;
+}
+.shape-illustration svg {
+  width: 100%;
+  height: 100%;
 }
